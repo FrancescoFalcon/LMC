@@ -1,0 +1,3 @@
+# Optional tools dependencies
+# Needed only if you use tools/extract_pdf_text.py
+pypdf>=4.2.0

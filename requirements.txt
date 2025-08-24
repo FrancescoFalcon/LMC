@@ -1,1 +1,4 @@
-pypdf>=4.2.0
+## Runtime dependencies for LMC
+# This project has no mandatory third‑party runtime packages.
+# Standard library only.
+
