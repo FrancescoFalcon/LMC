@@ -7,7 +7,7 @@ Questo progetto implementa:
 - Un simulatore di LMC (classe `LMC` in `lmc/machine.py`)
 - Un assembler per l'assembly semplificato LMC (classe `Assembler` in `lmc/assembler.py`)
 
-Requisiti: Python 3.11+.
+Requisiti: Python 3.11+. Runtime senza dipendenze esterne (solo standard library). Strumenti opzionali richiedono dipendenze aggiuntive.
 
 ## Caratteristiche implementate
 
@@ -39,11 +39,31 @@ Requisiti: Python 3.11+.
 
 ## Installazione
 
-1. Creare ed attivare un virtualenv (opzionale ma consigliato).
-2. Installare le dipendenze:
+### Ambiente virtuale (PowerShell su Windows)
 
+```powershell
+python -m venv .venv
+.\.venv\Scripts\Activate.ps1
 ```
+
+### Dipendenze
+
+- Solo runtime (libreria/CLI):
+
+```powershell
 pip install -r requirements.txt
+```
+
+- Sviluppo e test (pytest):
+
+```powershell
+pip install -r requirements-dev.txt
+```
+
+- Strumenti opzionali (estrazione testo da PDF per `tools/extract_pdf_text.py`):
+
+```powershell
+pip install -r requirements-tools.txt
 ```
 
 ## Utilizzo
@@ -72,22 +92,42 @@ print(list(machine.output_queue))
 
 ### CLI rapido
 
-```bash
+```powershell
 python tools/run_lmc.py examples/sum2.asm --inputs 7 8
 # Output: [15]
 
-python tools/run_lmc.py examples/counter.asm --inputs 3  
+python tools/run_lmc.py examples/counter.asm --inputs 3
 # Output: [0, 1, 2, 3]
+```
+
+### Ispezione stato passo-passo
+
+```powershell
+python tools/inspect_lmc.py
 ```
 
 ## Test
 
-```bash
-python -m pytest tests/test_lmc_core.py -v
+```powershell
+python -m pytest -q
 ```
+
+## Esempi
+
+- `examples/sum2.asm`: somma due input e stampa il risultato.
+- `examples/counter.asm`: stampa da 0 a n (incluso) dove n è l'input.
+- `examples/screenshot_prog.asm`: programma di esempio basato sugli screenshot.
 
 ## Note
 
 - In caso di errori, vengono sollevate eccezioni specifiche (vedi `lmc/exceptions.py`).
 - BRZ salta solo se accumulatore=0 E flag assente.
 - BRP salta se flag assente (operazione precedente in range 0-999).
+
+## Integrazione CI
+
+- GitHub Actions esegue automaticamente i test su push/PR (vedi badge in alto).
+
+## Licenza
+
+Distribuito con licenza MIT. Vedi il file `LICENSE`.
