@@ -49,11 +49,11 @@ def demo_inspection():
             inspect_lmc_state(machine, step)
             
             if not continuing:
-                print("\n🛑 HALT raggiunto!")
+                print("\n HALT raggiunto!")
                 break
                 
         except Exception as e:
-            print(f"\n❌ Errore: {e}")
+            print(f"\n Errore: {e}")
             break
 
 
