@@ -15,25 +15,12 @@ from .exceptions import (
 
 @dataclass
 class LMC:
-    """Simulatore di Little Man Computer (LMC).
-
-    Istruzioni:
-    - 1xx: ADD xx
-    - 2xx: SUB xx
-    - 3xx: STA xx (STORE)
-    - 5xx: LDA xx (LOAD)
-    - 6xx: BRA xx (salto incondizionato)
-    - 7xx: BRZ xx (salta se accumulatore == 0 e flag assente)
-    - 8xx: BRP xx (salta se flag assente)
-    - 901: INP
-    - 902: OUT
-    - 000: HLT
-    """
+    """Simulatore di Little Man Computer (LMC)."""
 
     memory: List[int] = field(default_factory=lambda: [0] * 100)
     accumulator: int = 0
     pc: int = 0
-    flag: bool = False
+    flag: bool = False  # negativo: True se l'ultimo risultato aritmetico è negativo
     input_queue: Deque[int] = field(default_factory=deque)
     output_queue: Deque[int] = field(default_factory=deque)
 
@@ -73,14 +60,14 @@ class LMC:
     def step(self) -> bool:
         """Esegue una singola istruzione. Ritorna False se HALT, True altrimenti.
 
-        Istruzioni secondo specifica:
+    Istruzioni secondo specifica:
         - 1xx: ADD xx
         - 2xx: SUB xx
         - 3xx: STA xx (STORE)
         - 5xx: LDA xx (LOAD)
         - 6xx: BRA xx (branch always)
-        - 7xx: BRZ xx (branch if zero)
-        - 8xx: BRP xx (branch if positive: flag assente)
+        - 7xx: BRZ xx (branch if zero: dipende solo da ACC==0)
+        - 8xx: BRP xx (branch if positive/zero: dipende da flag negativo assente)
         - 901: INP
         - 902: OUT
         - 000: HLT
@@ -129,13 +116,13 @@ class LMC:
         if hundred == 6:  # BRA
             self._jump(arg)
             return True
-        if hundred == 7:  # BRZ (acc==0 AND flag==False)
-            if (self._clamp(self.accumulator) == 0) and (not self.flag):
+        if hundred == 7:  # BRZ: salta se ACC==0 (ignora il flag)
+            if self._clamp(self.accumulator) == 0:
                 self._jump(arg)
             else:
                 self.pc = next_pc
             return True
-        if hundred == 8:  # BRP (branch if positive: flag assente)
+        if hundred == 8:  # BRP: salta se l'ultimo risultato non è negativo (flag==False)
             if not self.flag:
                 self._jump(arg)
             else:
@@ -154,15 +141,20 @@ class LMC:
 
     # Helpers
     def _arith(self, value: int):
-        """Aggiorna accumulatore e flag in base al risultato aritmetico.
-        
+        """Aggiorna accumulatore e flag negativo in base al risultato aritmetico.
+
+        Il flag indica solo la negatività del risultato prima del clamp:
+        - flag = True se value < 0 (risultato negativo)
+        - flag = False se value >= 0 (risultato non negativo), anche in caso di overflow positivo
+
         Args:
             value: risultato dell'operazione aritmetica (può essere fuori range)
-            
-        Output:
-            Modifica self.accumulator (con clamp 0-999) e self.flag (True se overflow/underflow)
+
+        Effetti:
+            - self.accumulator viene clampato nel range 0-999 (mod 1000)
+            - self.flag viene impostato in base a (value < 0)
         """
-        self.flag = not (0 <= value <= 999)
+        self.flag = value < 0
         self.accumulator = self._clamp(value)
 
     @staticmethod
