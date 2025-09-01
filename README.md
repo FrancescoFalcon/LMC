@@ -1,5 +1,5 @@
 # LMC - Little Man Computer (Python)
-[![CI](https://github.com/FrancescoFalcon/LMC/actions/workflows/ci.yml/badge.svg)](https://github.com/FrancescoFalcon/LMC/actions/workflows/ci.yml)
+[![CI](https://github.com/FrancescoFalcon/LMC/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/FrancescoFalcon/LMC/actions/workflows/ci.yml)
 
 Francesco Falcon SM3201408 
 
