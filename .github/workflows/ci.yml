@@ -5,6 +5,10 @@ on:
 jobs:
   test:
     runs-on: windows-latest
+    env:
+      PYTHONUTF8: '1'
+      PYTHONIOENCODING: 'utf-8'
+      PYTHONPATH: ${{ github.workspace }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -25,6 +29,13 @@ jobs:
           python -m pip install -r requirements.txt
           if (Test-Path requirements-dev.txt) { python -m pip install -r requirements-dev.txt }
           python -m pip list
+      - name: Show workspace layout
+        shell: pwsh
+        run: |
+          echo "Workspace: $pwd"
+          dir
+          echo "Tests directory:"
+          if (Test-Path tests) { dir tests -Recurse } else { echo "No tests directory found" }
       - name: Run tests
         shell: pwsh
-        run: python -m pytest -q
+        run: python -m pytest -q -vv --maxfail=1
