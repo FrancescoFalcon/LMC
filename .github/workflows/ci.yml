@@ -10,9 +10,21 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
-      - name: Install deps
+      - name: Prepare environment
+        shell: pwsh
         run: |
-          pip install -r requirements.txt
-          if (Test-Path requirements-dev.txt) { pip install -r requirements-dev.txt }
+          $env:PYTHONUTF8 = '1'
+          $env:PYTHONIOENCODING = 'utf-8'
+          chcp.com 65001 | Out-Null
+          python --version
+          python -m pip --version
+          python -m pip install --upgrade pip
+      - name: Install deps
+        shell: pwsh
+        run: |
+          python -m pip install -r requirements.txt
+          if (Test-Path requirements-dev.txt) { python -m pip install -r requirements-dev.txt }
+          python -m pip list
       - name: Run tests
-        run: pytest -q
+        shell: pwsh
+        run: python -m pytest -q
