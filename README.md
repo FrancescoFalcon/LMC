@@ -48,22 +48,10 @@ python -m venv .venv
 
 ### Dipendenze
 
-- Solo runtime (libreria/CLI):
+Installa tutto (runtime + test + tool opzionali) da un unico file:
 
 ```powershell
 pip install -r requirements.txt
-```
-
-- Sviluppo e test (pytest):
-
-```powershell
-pip install -r requirements-dev.txt
-```
-
-- Strumenti opzionali (estrazione testo da PDF per `tools/extract_pdf_text.py`):
-
-```powershell
-pip install -r requirements-tools.txt
 ```
 
 ## Utilizzo
