@@ -47,8 +47,8 @@ python -m venv .venv
 ```
 
 ### Dipendenze
-
-Installa tutto (runtime + test + tool opzionali) da un unico file:
+Necessario solo per provare i tests (opzionali)
+Installa tutto da un unico file:
 
 ```powershell
 pip install -r requirements.txt
@@ -104,7 +104,7 @@ python -m pytest -q
 
 - `examples/sum2.asm`: somma due input e stampa il risultato.
 - `examples/counter.asm`: stampa da 0 a n (incluso) dove n è l'input.
-- `examples/screenshot_prog.asm`: programma di esempio basato sugli screenshot.
+- `examples/screenshot_prog.asm`: programma di esempio basato sul pdf.
 
 ## Note
 
