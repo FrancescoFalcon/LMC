@@ -9,6 +9,16 @@ Questo progetto implementa:
 
 Requisiti: Python 3.11+. Runtime senza dipendenze esterne (solo standard library). Strumenti opzionali richiedono dipendenze aggiuntive.
 
+## Quick start (30s)
+
+```powershell
+python -m venv .venv
+\.\.venv\Scripts\Activate.ps1
+pip install -r requirements.txt
+python tools/run_lmc.py examples/sum2.asm --inputs 7 8
+# Output atteso: [15]
+```
+
 ## Caratteristiche implementate
 
 ### Architettura LMC
@@ -47,8 +57,7 @@ python -m venv .venv
 ```
 
 ### Dipendenze
-Necessario solo per provare i tests (opzionali)
-Installa tutto da un unico file:
+Necessario solo per provare i tests (opzionali). Installa tutto da un unico file:
 
 ```powershell
 pip install -r requirements.txt
@@ -106,11 +115,29 @@ python -m pytest -q
 - `examples/counter.asm`: stampa da 0 a n (incluso) dove n è l'input.
 - `examples/screenshot_prog.asm`: programma di esempio basato sul pdf.
 
+
+## Struttura progetto
+
+```
+.
+├─ lmc/         # Libreria: macchina LMC, assembler, eccezioni
+├─ tools/       # Script CLI (runner e ispezione)
+├─ examples/    # Programmi LMC di esempio
+├─ tests/       # Test PyTest
+├─ README.md    # Documentazione
+└─ requirements.txt
+```
+
 ## Note
 
 - In caso di errori, vengono sollevate eccezioni specifiche (vedi `lmc/exceptions.py`).
 - BRZ salta solo se accumulatore=0 E flag assente.
 - BRP salta se flag assente (operazione precedente in range 0-999).
+
+## Troubleshooting
+
+- ModuleNotFoundError: lmc → esegui i comandi dalla root del progetto (dove c'è `README.md`).
+- INP con coda vuota → fornisci input con `--inputs` al runner oppure `reset(inputs=[...])` nelle API.
 
 ## Integrazione CI
 
