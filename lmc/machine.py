@@ -76,12 +76,14 @@ class LMC:
         opcode = self._read_mem(self.pc)
         next_pc = (self.pc + 1) % 100
 
-        if opcode == 0:
+        hundred = opcode // 100
+        arg = opcode % 100
+
+        if hundred == 0:
             # HLT
             return False
 
-        hundred = opcode // 100
-        arg = opcode % 100
+    
 
         if opcode == 901:
             # INP: non modifica il flag
